@@ -1,0 +1,14 @@
+build/
+dist/
+.idea/
+.cache/
+__pycache__/
+*.egg-info/
+*.egg
+*.pyc
+*.cfg
+*.png
+*.jpg
+compressions/
+.pypirc
+test.py
