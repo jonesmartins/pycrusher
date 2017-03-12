@@ -31,8 +31,6 @@ Type in the command line:
 Windows:
 ```sh
 C:\path\to\somewhere > py -m pycrusher <image_file> <flags and parameters>
-or
-C:\path\to\somewhere > pycrusher <image_file> <flags and parameters>
 ```
 
 As default, the program saves your output in a special directory called 'compressions' located at `path/to/somewhere`, so if you use *pyCrusher* multiple times in `path/to/somewhere`, you can check your compressed images without mixing it up between your other files.
@@ -117,3 +115,11 @@ $ pycrusher crusher.png -i 20 -c 4 0 -p
 ```
 **output**: compressions/crusher_i20e1pc[4.0,0.0].png
 ![compressed_crusher1](https://cloud.githubusercontent.com/assets/15959626/22492096/1640df30-e80f-11e6-94b5-3adedc6771b4.png)
+
+##Contributing:
+
+Contributions are welcome!
+
+##License:
+
+MIT
