@@ -1,4 +1,4 @@
-# pyCrusher 0.3.5
+# pyCrusher 0.3.6
 
 **Crusher (Wikipedia):**
 >Crushers may be used to reduce the size, or change the form, of waste materials so they can be more easily disposed of or recycled..."
@@ -15,17 +15,12 @@ sudo pip install -U pycrusher
 
 Windows:
 ```sh
-py -m pip install -U pycrusher
+py(or python) -m pip install -U pycrusher
 ```
 
 Or download this package and manually run:
 ```sh
 sudo python setup.py install
-```
-
-If an ImportError happens (mostly Python 3), try running 
-```sh
-pip install -r requirements.txt'
 ```
 
 ## Usage:

@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 
 version_url = 'https://github.com/jonesmartins/pycrusher/tarball/'\
              + __version__
@@ -16,5 +16,5 @@ setup(
     keywords=['lossy', 'compression', 'compress', 'jpeg'], 
     install_requires=['Pillow', 'argparse', 'tqdm'], 
     packages=['pycrusher'],
-    entry_points={'console_scripts': ['pycrusher = pycrusher:main']},    
+    entry_points={'console_scripts': ['pycrusher = pycrusher.__main__:main']},    
     )
