@@ -1,4 +1,4 @@
-# pyCrusher 0.3.6
+# pyCrusher 0.3.7
 
 **Crusher (Wikipedia):**
 >Crushers may be used to reduce the size, or change the form, of waste materials so they can be more easily disposed of or recycled..."

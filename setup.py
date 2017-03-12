@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = "0.3.6"
+__version__ = "0.3.7"
 
 version_url = 'https://github.com/jonesmartins/pycrusher/tarball/'\
              + __version__
