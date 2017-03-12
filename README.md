@@ -1,4 +1,4 @@
-# pyCrusher 0.3.7
+# pyCrusher 0.3.8
 
 **Crusher (Wikipedia):**
 >Crushers may be used to reduce the size, or change the form, of waste materials so they can be more easily disposed of or recycled..."
@@ -26,12 +26,15 @@ sudo python setup.py install
 ## Usage:
 Type in the command line:
 ```sh
-~/path/to/somewhere $ pycrusher <image_file>
+~/path/to/somewhere $ pycrusher <image_file> <flags and parameters>
 ```
 Windows:
 ```sh
-C:\path\to\somewhere > py -m pycrusher <image_file>
+C:\path\to\somewhere > py -m pycrusher <image_file> <flags and parameters>
+or
+C:\path\to\somewhere > pycrusher <image_file> <flags and parameters>
 ```
+
 As default, the program saves your output in a special directory called 'compressions' located at `path/to/somewhere`, so if you use *pyCrusher* multiple times in `path/to/somewhere`, you can check your compressed images without mixing it up between your other files.
 Every time you save a new file in 'compressions', your output file will be saved with your input name followed by the compression settings. You can still use the -o/--output flag and name it however you want.
 

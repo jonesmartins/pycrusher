@@ -3,12 +3,10 @@ dist/
 .idea/
 .cache/
 __pycache__/
+compressions/
 *.egg-info/
 *.egg
 *.pyc
-*.cfg
 *.png
 *.jpg
-compressions/
 .pypirc
-test.py
