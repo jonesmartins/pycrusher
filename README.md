@@ -9,27 +9,31 @@ Much like an actual crusher, *pyCrusher* copies your precious little images and 
 Install this program through pip:
 
 Linux/MacOS:
-```sh
+```bash
 sudo pip install -U pycrusher
 ```
 
 Windows:
-```sh
+```bash
 py(or python) -m pip install -U pycrusher
 ```
 
 Or download this package and manually run:
-```sh
+```bash
 sudo python setup.py install
+```
+and then install requirements with:
+```bash
+pip install -r requirements.txt
 ```
 
 ## Usage:
 Type in the command line:
-```sh
+```bash
 ~/path/to/somewhere $ pycrusher <image_file> <flags and parameters>
 ```
 Windows:
-```sh
+```bash
 C:\path\to\somewhere > py -m pycrusher <image_file> <flags and parameters>
 ```
 
@@ -74,43 +78,43 @@ Our image: crusher.png
 ![crusher](https://cloud.githubusercontent.com/assets/15959626/22045694/f78ef41c-dd02-11e6-9594-cd6b00e02884.png)
 
 
-```sh
+```bash
 $ pycrusher crusher.png
 ```
 **output**:  compressions/crusher_i50e1.png
 ![compressed_crusher0](https://cloud.githubusercontent.com/assets/15959626/22045698/fa458d24-dd02-11e6-8265-fdf3b902cded.jpg)
 #
-```sh
+```bash
 $ pycrusher crusher.png -i 10
 ```
 **output**: compressions/crusher_i10e1.png
 ![compressed_crusher6](https://cloud.githubusercontent.com/assets/15959626/22045854/0fc4f148-dd04-11e6-9e4d-fd60504fc2d5.jpg)
 #
-```sh
+```bash
 $ pycrusher crusher.png -i 10 -e 5
 ```
 **output**:  compressions/crusher_i10e5.png
 ![compressed_crusher1](https://cloud.githubusercontent.com/assets/15959626/22045717/1883c198-dd03-11e6-9e76-4a6cb20c0413.jpg)
 #
-```sh
+```bash
 $ pycrusher crusher.png -i 20 -c 4
 ```
 **output**: compressions/crusher_i20e1c[4.0].png
 ![compressed_crusher7](https://cloud.githubusercontent.com/assets/15959626/22045906/63ef3a76-dd04-11e6-9ed0-4080a7c92ab9.jpg)
 #
-```sh
+```bash
 $ pycrusher crusher.png -i 20 -c 4 -r
 ```
 **output**: compressions/crusher_i20e1rc[4.0].png
 ![compressed_crusher5](https://cloud.githubusercontent.com/assets/15959626/22492147/6bc72270-e80f-11e6-8e64-fa678fa03b0a.png)
 #
-```sh
+```bash
 $ pycrusher crusher.png -i 20 -c 4 0
 ```
 **output**:  compressions/crusher_i20e1c[4.0,0.0].png
 ![compressed_crusher5](https://cloud.githubusercontent.com/assets/15959626/22045830/d62aae5a-dd03-11e6-8efd-a3fb90b42f0b.jpg)
 #
-```sh
+```bash
 $ pycrusher crusher.png -i 20 -c 4 0 -p
 ```
 **output**: compressions/crusher_i20e1pc[4.0,0.0].png
