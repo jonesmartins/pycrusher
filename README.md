@@ -120,10 +120,10 @@ $ pycrusher crusher.png -i 20 -c 4 0 -p
 **output**: compressions/crusher_i20e1pc[4.0,0.0].png
 ![compressed_crusher1](https://cloud.githubusercontent.com/assets/15959626/22492096/1640df30-e80f-11e6-94b5-3adedc6771b4.png)
 
-##Contributing:
+## Contributing:
 
 Contributions are welcome!
 
-##License:
+## License:
 
 Apache License 2.0
