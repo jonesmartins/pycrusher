@@ -1,3 +1,8 @@
+> [!WARNING]
+> This project has been archived on GitHub and removed from PyPI.
+> 
+> I have updated the install instructions for Unix distributions.
+
 # pyCrusher 0.3.8
 
 **Crusher (Wikipedia):**
@@ -5,36 +10,27 @@
 
 Much like an actual crusher, *pyCrusher* copies your precious little images and turns them into absolute trash (for fun!)
 
-## Installation
-Install this program through pip:
+## Install instructions 
 
-Linux/MacOS:
+### [Pipx](https://pipx.pypa.io/stable/) (recommended)
+
 ```bash
-sudo pip install -U pycrusher
+pipx install git+https://github.com/jonesmartins/pycrusher.git
 ```
 
-Windows:
+### Download manually (Linux/MacOS)
+
 ```bash
-py(or python) -m pip install -U pycrusher
+git clone https://github.com/jonesmartins/pycrusher
+cd pycrusher
+python setup.py install
 ```
 
-Or download this package and manually run:
-```bash
-sudo python setup.py install
-```
-and then install requirements with:
-```bash
-pip install -r requirements.txt
-```
+## Usage
 
-## Usage:
 Type in the command line:
 ```bash
-~/path/to/somewhere $ pycrusher <image_file> <flags and parameters>
-```
-Windows:
-```bash
-C:\path\to\somewhere > py -m pycrusher <image_file> <flags and parameters>
+pycrusher <image_file> <flags and parameters>
 ```
 
 As default, the program saves your output in a special directory called 'compressions' located at `path/to/somewhere`, so if you use *pyCrusher* multiple times in `path/to/somewhere`, you can check your compressed images without mixing it up between your other files.
@@ -42,87 +38,96 @@ Every time you save a new file in 'compressions', your output file will be saved
 
 Default name: `compression/<image-name>_i<iterations>e<extra><r><p><c>[colors].<extension>`
 
-### Options:
+### Options
 
-**-h, --help**
+```txt
+usage: pycrusher [-h] [-i ITERATIONS] [-e EXTRA] [-c [COLORS ...]] [-o OUTPUT] [-r] [-p] file
 
-Display the help information.
+positional arguments:
+  file                  Name of image to compress
 
-**-i, --iterations ITERATIONS**
+options:
+  -h, --help            show this help message and exit
+  -i ITERATIONS, --iterations ITERATIONS
+                        Number of compression iterations
+  -e EXTRA, --extra EXTRA
+                        Number of nested iterations
+  -c [COLORS ...], --colors [COLORS ...]
+                        Color changes
+  -o OUTPUT, --output OUTPUT
+                        Name of output file.
+  -r, --reverse         Reverses compression iterations.
+  -p, --preprocess      Adds color enhancement BEFORE compression.
+```
 
-How many times you want your image to be compressed. Default: 50
+## Examples
 
-**-e, --extra EXTRA**
-
-How many times you want ITERATIONS to happen. Usually enforces the effect of ITERATIONS. Default: 1
-
-**-c, --colors [COLOR, ...]**
-
-Different saturation values you want the image to be post-processed with. They are read in order. Default: [1.0]
-
-**-o, --output OUTFILENAME**
-
-Name of output, which will also be saved in 'compressions'.
-
-**-r, --reverse**
-
-Flag that means file will compress image from worst quality to best, creating a 'blockier' image.
-
-**-p, --preprocess**
-
-Flag that applies color changes from -c, --colors before compressing, might create interesting effects.
-
-## Examples:
-Our image: crusher.png
+**Original image:** crusher.png
 
 ![crusher](https://cloud.githubusercontent.com/assets/15959626/22045694/f78ef41c-dd02-11e6-9594-cd6b00e02884.png)
 
+---
 
 ```bash
 $ pycrusher crusher.png
 ```
-**output**:  compressions/crusher_i50e1.png
+**Default output filename:**   compressions/crusher_i50e1.png
+
 ![compressed_crusher0](https://cloud.githubusercontent.com/assets/15959626/22045698/fa458d24-dd02-11e6-8265-fdf3b902cded.jpg)
-#
+
+---
+
 ```bash
 $ pycrusher crusher.png -i 10
 ```
-**output**: compressions/crusher_i10e1.png
+**Default output filename:**  compressions/crusher_i10e1.png
+
 ![compressed_crusher6](https://cloud.githubusercontent.com/assets/15959626/22045854/0fc4f148-dd04-11e6-9e4d-fd60504fc2d5.jpg)
-#
+
+---
+
 ```bash
 $ pycrusher crusher.png -i 10 -e 5
 ```
-**output**:  compressions/crusher_i10e5.png
+**Default output filename:**   compressions/crusher_i10e5.png
+
 ![compressed_crusher1](https://cloud.githubusercontent.com/assets/15959626/22045717/1883c198-dd03-11e6-9e76-4a6cb20c0413.jpg)
-#
+
+---
+
 ```bash
 $ pycrusher crusher.png -i 20 -c 4
 ```
-**output**: compressions/crusher_i20e1c[4.0].png
+**Default output filename:**  compressions/crusher_i20e1c[4.0].png
+
 ![compressed_crusher7](https://cloud.githubusercontent.com/assets/15959626/22045906/63ef3a76-dd04-11e6-9ed0-4080a7c92ab9.jpg)
-#
+
+---
+
 ```bash
 $ pycrusher crusher.png -i 20 -c 4 -r
 ```
-**output**: compressions/crusher_i20e1rc[4.0].png
+**Default output filename:** compressions/crusher_i20e1rc[4.0].png
+
 ![compressed_crusher5](https://cloud.githubusercontent.com/assets/15959626/22492147/6bc72270-e80f-11e6-8e64-fa678fa03b0a.png)
-#
+
+---
+
 ```bash
 $ pycrusher crusher.png -i 20 -c 4 0
 ```
-**output**:  compressions/crusher_i20e1c[4.0,0.0].png
+**Default output filename:**  compressions/crusher_i20e1c[4.0,0.0].png
+
 ![compressed_crusher5](https://cloud.githubusercontent.com/assets/15959626/22045830/d62aae5a-dd03-11e6-8efd-a3fb90b42f0b.jpg)
-#
+
+---
+
 ```bash
 $ pycrusher crusher.png -i 20 -c 4 0 -p
 ```
-**output**: compressions/crusher_i20e1pc[4.0,0.0].png
+**Default output filename:**  compressions/crusher_i20e1pc[4.0,0.0].png
+
 ![compressed_crusher1](https://cloud.githubusercontent.com/assets/15959626/22492096/1640df30-e80f-11e6-94b5-3adedc6771b4.png)
-
-## Contributing:
-
-Contributions are welcome!
 
 ## License:
 
