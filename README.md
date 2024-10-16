@@ -1,21 +1,31 @@
-> [!WARNING]
-> This project has been archived on GitHub and removed from PyPI.
-> 
-> I have updated the install instructions for Unix distributions.
-
-# pyCrusher 0.3.8
+# pyCrusher 0.3.9
 
 **Crusher (Wikipedia):**
 >Crushers may be used to reduce the size, or change the form, of waste materials so they can be more easily disposed of or recycled..."
 
 Much like an actual crusher, *pyCrusher* copies your precious little images and turns them into absolute trash (for fun!)
 
-## Install instructions 
+## Install instructions
 
-### [Pipx](https://pipx.pypa.io/stable/) (recommended)
+### [Pipx](https://pipx.pypa.io/stable/)
 
 ```bash
-pipx install git+https://github.com/jonesmartins/pycrusher.git
+pipx install pycrusher
+```
+
+### Uv
+
+```bash
+uv tool install pycrusher
+```
+
+### Pip
+
+```bash
+pip install pycrusher
+```
+
+```
 ```
 
 ### Download manually (Linux/MacOS)
@@ -29,6 +39,7 @@ python setup.py install
 ## Usage
 
 Type in the command line:
+
 ```bash
 pycrusher <image_file> <flags and parameters>
 ```
@@ -69,8 +80,9 @@ options:
 ---
 
 ```bash
-$ pycrusher crusher.png
+pycrusher crusher.png
 ```
+
 **Default output filename:**   compressions/crusher_i50e1.png
 
 ![compressed_crusher0](https://cloud.githubusercontent.com/assets/15959626/22045698/fa458d24-dd02-11e6-8265-fdf3b902cded.jpg)
@@ -78,8 +90,9 @@ $ pycrusher crusher.png
 ---
 
 ```bash
-$ pycrusher crusher.png -i 10
+pycrusher crusher.png -i 10
 ```
+
 **Default output filename:**  compressions/crusher_i10e1.png
 
 ![compressed_crusher6](https://cloud.githubusercontent.com/assets/15959626/22045854/0fc4f148-dd04-11e6-9e4d-fd60504fc2d5.jpg)
@@ -87,8 +100,9 @@ $ pycrusher crusher.png -i 10
 ---
 
 ```bash
-$ pycrusher crusher.png -i 10 -e 5
+pycrusher crusher.png -i 10 -e 5
 ```
+
 **Default output filename:**   compressions/crusher_i10e5.png
 
 ![compressed_crusher1](https://cloud.githubusercontent.com/assets/15959626/22045717/1883c198-dd03-11e6-9e76-4a6cb20c0413.jpg)
@@ -96,8 +110,9 @@ $ pycrusher crusher.png -i 10 -e 5
 ---
 
 ```bash
-$ pycrusher crusher.png -i 20 -c 4
+pycrusher crusher.png -i 20 -c 4
 ```
+
 **Default output filename:**  compressions/crusher_i20e1c[4.0].png
 
 ![compressed_crusher7](https://cloud.githubusercontent.com/assets/15959626/22045906/63ef3a76-dd04-11e6-9ed0-4080a7c92ab9.jpg)
@@ -105,8 +120,9 @@ $ pycrusher crusher.png -i 20 -c 4
 ---
 
 ```bash
-$ pycrusher crusher.png -i 20 -c 4 -r
+pycrusher crusher.png -i 20 -c 4 -r
 ```
+
 **Default output filename:** compressions/crusher_i20e1rc[4.0].png
 
 ![compressed_crusher5](https://cloud.githubusercontent.com/assets/15959626/22492147/6bc72270-e80f-11e6-8e64-fa678fa03b0a.png)
@@ -114,8 +130,9 @@ $ pycrusher crusher.png -i 20 -c 4 -r
 ---
 
 ```bash
-$ pycrusher crusher.png -i 20 -c 4 0
+pycrusher crusher.png -i 20 -c 4 0
 ```
+
 **Default output filename:**  compressions/crusher_i20e1c[4.0,0.0].png
 
 ![compressed_crusher5](https://cloud.githubusercontent.com/assets/15959626/22045830/d62aae5a-dd03-11e6-8efd-a3fb90b42f0b.jpg)
@@ -123,12 +140,13 @@ $ pycrusher crusher.png -i 20 -c 4 0
 ---
 
 ```bash
-$ pycrusher crusher.png -i 20 -c 4 0 -p
+pycrusher crusher.png -i 20 -c 4 0 -p
 ```
+
 **Default output filename:**  compressions/crusher_i20e1pc[4.0,0.0].png
 
 ![compressed_crusher1](https://cloud.githubusercontent.com/assets/15959626/22492096/1640df30-e80f-11e6-94b5-3adedc6771b4.png)
 
-## License:
+## License
 
 Apache License 2.0
