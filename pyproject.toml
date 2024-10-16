@@ -1,19 +1,20 @@
-[tool.poetry]
+[project]
 name = "pycrusher"
 version = "0.3.8"
-description = "Generate losy JPEG compressions for fun!"
-authors = ["Jones Martins <15959626+jonesmartins@users.noreply.github.com>"]
-license = "Apache 2.0"
+description = "Generate lossy JPEG compressions for fun!"
+# license = "Apache 2.0"
 readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["pillow>=9.5.0", "tqdm>=4.66.5"]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pillow = "^11.0.0"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.project.scripts]
-pycrusher = "pycrusher._main:main"
+[tool.uv]
+dev-dependencies = [
+ "hypothesis>=6.79.4",
+ "mypy>=1.4.1",
+ "pytest>=7.4.4",
+ "types-colorama>=0.4.15.12",
+ "types-pillow>=10.1.0.2",
+ "types-pygments>=2.17.0.0",
+ "types-setuptools>=69.0.0.0",
+ "types-tqdm>=4.66.0.5",
+]
