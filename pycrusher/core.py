@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import io
 import pathlib
-import shutil
 
 import tqdm
 from PIL import Image, ImageEnhance
@@ -46,28 +46,33 @@ def generate_default_output_name(
 
 
 def compress(
-    image_path: pathlib.Path,
+    image_buffer: io.BytesIO,
     qualities: list[int],
 ) -> None:
     """
     Save file repeatedly as JPEG for each quality in qualities.
 
     Args:
-        image_path (pathlib.Path): Image file path.
+        image_buffer (io.BytesIO): Buffer containing image file.
         qualities (list[int]): List of JPEG qualities.
 
     """
     for quality in tqdm.tqdm(qualities):
-        with Image.open(image_path) as img:
+        with Image.open(image_buffer) as img:
+            img.load()
+
+            image_buffer.seek(0)
+            image_buffer.truncate()
+
             img.save(
-                image_path,
+                image_buffer,
                 format="JPEG",
                 quality=quality,
             )
 
 
 def change_color(
-    image_path: pathlib.Path,
+    image_buffer: io.BytesIO,
     color: float,
     quality: int,
 ) -> None:
@@ -75,16 +80,20 @@ def change_color(
     Change image saturation and save it with last compression quality.
 
     Args:
-        image_path (pathlib.Path): Input image path
+        image_buffer (io.BytesIO): Buffer containing image file.
         color (float): Color enhancement factor
         quality (int): JPEG quality
 
     """
-    with Image.open(image_path) as img:
+    with Image.open(image_buffer) as img:
         converter = ImageEnhance.Color(img)
         enhanced_img = converter.enhance(color)
+
+        image_buffer.seek(0)
+        image_buffer.truncate()
+
         enhanced_img.save(
-            image_path,
+            image_buffer,
             format="JPEG",
             quality=quality,
         )
@@ -122,7 +131,7 @@ def confirm(title: str, question: str) -> bool:
     User is required to respond.
 
     Args:
-        title (str): Top message in confirmation.
+        title (str): Top message, printed only once.
         question (str): Question user must respond.
 
     Returns:
@@ -153,11 +162,11 @@ def run(
     if output_path is None:
         default_output_name = generate_default_output_name(
             input_path,
-            iterations,
-            extra,
-            color,
-            reverse,
-            preprocess,
+            iterations=iterations,
+            extra=extra,
+            color=color,
+            reverse=reverse,
+            preprocess=preprocess,
         )
         output_path = COMPRESSIONS_DIRECTORY.joinpath(default_output_name)
 
@@ -169,15 +178,14 @@ def run(
         if not should_overwrite:
             return
 
-        shutil.copy2(input_path, output_path)
-
     qualities = extra * generate_quality_sequence(iterations, reverse)
 
-    if preprocess:
-        change_color(output_path, color, quality=qualities[0])
-        if len(qualities) > 1:
-            compress(output_path, qualities[1:])
-    else:
-        compress(output_path, qualities[:-1])
-        if len(qualities) > 1:
-            change_color(output_path, color, quality=qualities[-1])
+    with io.BytesIO(input_path.read_bytes()) as image_buffer:
+        if preprocess:
+            change_color(image_buffer, color, quality=qualities[0])
+            compress(image_buffer, qualities[1:])
+        else:
+            compress(image_buffer, qualities[:-1])
+            change_color(image_buffer, color, quality=qualities[-1])
+
+        output_path.write_bytes(image_buffer.getvalue())
