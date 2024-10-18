@@ -24,6 +24,7 @@ def get_argparser() -> argparse.ArgumentParser:
         help="Input image filename",
         metavar="INPUT_PATH",
     )
+
     parser.add_argument(
         "-v",
         "--version",
@@ -31,6 +32,7 @@ def get_argparser() -> argparse.ArgumentParser:
         version=f"%(prog)s {version(PROGRAM)}",
         help="show %(prog)s version",
     )
+
     parser.add_argument(
         "-i",
         "--iterations",
@@ -39,7 +41,6 @@ def get_argparser() -> argparse.ArgumentParser:
         help="Number of compression iterations",
         default=ITERATIONS_DEFAULT,
     )
-
     parser.add_argument(
         "-e",
         "--extra",
@@ -49,6 +50,14 @@ def get_argparser() -> argparse.ArgumentParser:
         default=EXTRA_DEFAULT,
     )
     parser.add_argument(
+        "-r",
+        "--reverse",
+        dest="reverse",
+        action="store_true",
+        help="Reverses compression iterations (lower to higher)",
+    )
+
+    parser.add_argument(
         "-c",
         "--color",
         dest="color",
@@ -56,6 +65,7 @@ def get_argparser() -> argparse.ArgumentParser:
         help="Color enhancement",
         default=COLOR_DEFAULT,
     )
+
     parser.add_argument(
         "-o",
         "--output",
@@ -64,13 +74,7 @@ def get_argparser() -> argparse.ArgumentParser:
         help="Output image filename",
         default=OUTPUT_DEFAULT,
     )
-    parser.add_argument(
-        "-r",
-        "--reverse",
-        dest="reverse",
-        action="store_true",
-        help="Reverses compression iterations (lower to higher)",
-    )
+
     parser.add_argument(
         "-p",
         "--preprocess",

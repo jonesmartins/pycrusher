@@ -29,9 +29,6 @@ uv tool install pycrusher
 pip install pycrusher
 ```
 
-```
-```
-
 ### Download manually (Linux/MacOS)
 
 ```bash
