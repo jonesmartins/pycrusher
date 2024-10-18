@@ -3,20 +3,19 @@ name = "pycrusher"
 version = "0.3.9"
 description = "Generate lossy JPEG compressions for fun!"
 readme = "README.md"
-requires-python = ">=3.7"
+keywords = ["image processing", "jpeg", "lossy compression"]
+license = { text = "Apache 2.0" }
 authors = [
   { name = "Jones Martins", email = "15959626+jonesmartins@users.noreply.github.com" },
 ]
-dependencies = ["pillow>=9.5.0", "tqdm>=4.66.5"]
-keywords = ["jpeg", "image processing", "lossy compression"]
-license = { text = "Apache 2.0" }
+requires-python = ">=3.7"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Console",
-  "Operating System :: OS Independent",
   "Intended Audience :: End Users/Desktop",
   "License :: OSI Approved :: Apache Software License",
-  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
@@ -24,19 +23,65 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: 3.14",
   "Topic :: Artistic Software",
   "Typing :: Typed",
 ]
 
-[project.urls]
-Repository = "https://github.com/jonsmartins/pycrusher"
-Issues = "https://github.com/jonesmarints/pycrusher/issues"
+dependencies = ["importlib-metadata>=6.7", "pillow>=9.5", "tqdm>=4.66.5"]
+
+urls.Issues = "https://github.com/jonesmartins/pycrusher/issues"
+urls.Repository = "https://github.com/jonsmartins/pycrusher"
+
+scripts.pycrusher = "pycrusher.cli:main"
+
+[tool.ruff]
+target-version = "py37"
+format.preview = true
+lint.select = ["ALL"]
+lint.ignore = [
+  "ANN101", # no type annotation for self
+  "CPY001", # copyright notices
+  "D203",   # 'one blank line before class summary'
+  "D212",   # 'multiline summary should start at first line'
+  # By Ruff's recommendation:
+  "COM812",
+  "ISC001",
+]
+lint.per-file-ignores."tests/**/*.py" = [
+  "D",       # no documentation lints
+  "PLR6301", # method could be function, class method or static method
+  "S101",    # asserts not allowed
+]
+
+lint.preview = true
+
+[tool.pytest.ini_options]
+# For future reference: https://docs.pytest.org/en/7.1.x/reference/reference.html#ini-options-ref
+testpaths = ["tests"]
+xfail_strict = true
+addopts = """\
+  --strict-config
+  --strict-markers
+  --cov=pycrusher
+  --cov-branch
+  --hypothesis-explain
+"""
+
+
+[tool.codespell]
+# builtin = "clear,usage"
+count = true
+
+[tool.mypy]
+show_error_codes = true
+strict = true
 
 [tool.uv]
 dev-dependencies = [
   "hypothesis>=6.79.4",
   "mypy>=1.4.1",
+  "pytest-cov>=4.1.0",
+  "pytest-xdist>=3.5.0",
   "pytest>=7.4.4",
   "types-colorama>=0.4.15.12",
   "types-pillow>=10.1.0.2",
@@ -44,9 +89,3 @@ dev-dependencies = [
   "types-setuptools>=69.0.0.0",
   "types-tqdm>=4.66.0.5",
 ]
-
-[tool.setuptools.packages.find]
-exclude = ["tests"]
-
-[project.scripts]
-pycrusher = "pycrusher.cli:main"
