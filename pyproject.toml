@@ -34,6 +34,7 @@ urls.Repository = "https://github.com/jonesmartins/pycrusher"
 
 scripts.pycrusher = "pycrusher.cli:main"
 
+
 [tool.ruff]
 target-version = "py37"
 format.preview = true
@@ -44,7 +45,7 @@ lint.ignore = [
   "COM812",
   "CPY001", # copyright notices
   "D203",   # 'one blank line before class summary'
-  "D212",   # 'multiline summary should start at first line'
+  "D212",   # 'multiline summary should start at second line'
   "ISC001",
 ]
 lint.per-file-ignores."tests/**/*.py" = [
@@ -61,7 +62,6 @@ count = true
 
 [tool.pytest.ini_options]
 # For future reference: https://docs.pytest.org/en/7.1.x/reference/reference.html#ini-options-ref
-testpaths = ["tests"]
 xfail_strict = true
 addopts = """\
   --strict-config
@@ -76,6 +76,7 @@ show_error_codes = true
 strict = true
 
 [tool.uv]
+package = true
 dev-dependencies = [
   "hypothesis>=6.79.4",
   "mypy>=1.4.1",

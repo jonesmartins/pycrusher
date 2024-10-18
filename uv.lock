@@ -293,7 +293,7 @@ wheels = [
 [[package]]
 name = "pycrusher"
 version = "0.3.9"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "importlib-metadata" },
     { name = "pillow" },
