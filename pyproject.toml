@@ -1,6 +1,6 @@
 [project]
 name = "pycrusher"
-version = "0.3.10"
+version = "0.3.11"
 description = "Generate lossy JPEG compressions for fun!"
 readme = "README.md"
 keywords = ["image processing", "jpeg", "lossy compression"]

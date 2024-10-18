@@ -6,7 +6,7 @@ import pathlib
 import tqdm
 from PIL import Image, ImageEnhance
 
-COMPRESSIONS_DIRECTORY = pathlib.Path.cwd().joinpath("compressions")
+CWD_COMPRESSIONS_DIRECTORY = pathlib.Path.cwd().joinpath("compressions")
 
 
 def generate_default_output_name(
@@ -168,7 +168,8 @@ def run(
             reverse=reverse,
             preprocess=preprocess,
         )
-        output_path = COMPRESSIONS_DIRECTORY.joinpath(default_output_name)
+        output_path = CWD_COMPRESSIONS_DIRECTORY.joinpath(default_output_name)
+        CWD_COMPRESSIONS_DIRECTORY.mkdir(exist_ok=True)
 
     if output_path.exists():
         should_overwrite = confirm(
