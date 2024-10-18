@@ -20,7 +20,7 @@ from pycrusher.cli import (
     validate_input_path,
     validate_iterations,
 )
-from tests.test_core import SMALL_TEST_IMAGES
+from tests.utils import SMALL_TEST_IMAGES_DIRECTORY
 
 
 class TestParseArgs:
@@ -191,7 +191,7 @@ class TestParseArgs:
 
 
 class TestValidateNamespace:
-    @pytest.mark.parametrize("input_path", SMALL_TEST_IMAGES.iterdir())
+    @pytest.mark.parametrize("input_path", SMALL_TEST_IMAGES_DIRECTORY.iterdir())
     def test_valid_input_path(self, input_path: pathlib.Path) -> None:
         validate_input_path(argparse.Namespace(input_path=input_path))
 

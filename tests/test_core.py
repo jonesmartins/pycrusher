@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import io
 import pathlib
-import tempfile
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, Generator, TypeVar
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -11,19 +11,16 @@ import hypothesis
 import pytest
 from hypothesis import strategies as st
 
-from pycrusher.core import (
-    compress,
-    generate_quality_sequence,
-)
-
-SMALL_TEST_IMAGES = pathlib.Path("tests/images/small")
+from pycrusher.core import compress, generate_quality_sequence
+from tests.utils import SMALL_TEST_IMAGES_DIRECTORY, same_pixels_in_image_files
 
 
 class TestGetQualities:
     T = TypeVar("T")
 
+    # itertools.pairwise was added in python 3.10
     @staticmethod
-    def pairwise(iterable: Iterable[T]) -> tuple[T, T]:
+    def pairwise(iterable: Iterable[T]) -> Generator[tuple[T | None, T], T, None]:
         iterator = iter(iterable)
         a = next(iterator, None)
         for b in iterator:
@@ -70,35 +67,33 @@ class TestChangeColors:
 
 class TestCompress:
     @hypothesis.settings(deadline=None)
-    @pytest.mark.parametrize("input_path", SMALL_TEST_IMAGES.iterdir())
+    @pytest.mark.parametrize("input_path", SMALL_TEST_IMAGES_DIRECTORY.iterdir())
     @hypothesis.given(
         iterations=st.integers(min_value=1, max_value=2),
         extra=st.integers(min_value=1, max_value=2),
         reverse=st.booleans(),
     )
-    def test_compress_works_at_all(
+    def test_compress_raises_no_exceptions(
         self,
         input_path: pathlib.Path,
         iterations: int,
         extra: int,
         reverse: bool,
     ) -> None:
-        with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
-            tmp.write(input_path.read_bytes())
+        buf = io.BytesIO(input_path.read_bytes())
 
-            output_filename = pathlib.Path(tmp.name)
-            qualities = generate_quality_sequence(iterations, reverse)
+        qualities = extra * generate_quality_sequence(iterations, reverse)
 
-            compress(
-                output_filename,
-                extra * qualities,
-            )
+        compress(
+            buf,
+            qualities,
+        )
 
     @hypothesis.settings(deadline=None)
-    @pytest.mark.parametrize("input_path", SMALL_TEST_IMAGES.iterdir())
+    @pytest.mark.parametrize("input_path", SMALL_TEST_IMAGES_DIRECTORY.iterdir())
     @hypothesis.given(
-        iterations=st.integers(min_value=1, max_value=5),
-        extra=st.integers(min_value=1, max_value=3),
+        iterations=st.integers(min_value=2, max_value=5),
+        extra=st.integers(min_value=2, max_value=3),
         reverse=st.booleans(),
     )
     def test_compress(
@@ -108,13 +103,13 @@ class TestCompress:
         extra: int,
         reverse: bool,
     ) -> None:
-        with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
-            tmp.write(input_path.read_bytes())
+        buf = io.BytesIO(input_path.read_bytes())
 
-            output_filename = pathlib.Path(tmp.name)
-            qualities = generate_quality_sequence(iterations, reverse)
+        qualities = extra * generate_quality_sequence(iterations, reverse)
 
-            compress(
-                output_filename,
-                extra * qualities,
-            )
+        compress(
+            buf,
+            qualities,
+        )
+
+        assert not same_pixels_in_image_files(input_path, buf)
