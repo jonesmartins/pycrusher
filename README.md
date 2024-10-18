@@ -1,4 +1,8 @@
-# pyCrusher 0.3.9
+# pyCrusher
+
+[![pyCrusher version](https://img.shields.io/pypi/v/pycrusher.svg)](https://pypi.org/project/pycrusher)
+[![PyPI downloads](https://static.pepy.tech/badge/pycrusher)](https://pepy.tech/project/pycrusher)
+![Accepted Python versions](https://img.shields.io/pypi/pyversions/pycrusher.svg)
 
 **Crusher (Wikipedia):**
 >Crushers may be used to reduce the size, or change the form, of waste materials so they can be more easily disposed of or recycled..."
@@ -23,9 +27,6 @@ uv tool install pycrusher
 
 ```bash
 pip install pycrusher
-```
-
-```
 ```
 
 ### Download manually (Linux/MacOS)

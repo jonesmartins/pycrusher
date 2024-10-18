@@ -1,125 +1,191 @@
-from __future__ import absolute_import
-from __future__ import print_function
 from __future__ import annotations
 
-import os
-import sys
+import io
+import pathlib
+
 import tqdm
+from PIL import Image, ImageEnhance
 
-from .name_generator import get_final_output_name
-from PIL import Image, ImageFile, ImageEnhance
+COMPRESSIONS_DIRECTORY = pathlib.Path.cwd().joinpath("compressions")
 
 
-def prepare_compression(input_name: str, output_name: str, dir_name: str = "") -> None:
-    """First thing done with the file. Opens and saves it in dir_name
-    with the final name.
-    Args:
-        input_name(str): Input given by parse_args.
-        output_name(str): String representing the final file name,
-                                with version and format.
-        dir_name(str)[Optional]:
-    Raises:
-        OSError: Input_name doesn't exist.
+def generate_default_output_name(
+    input_path: pathlib.Path,
+    *,
+    iterations: int,
+    extra: int,
+    color: float,
+    reverse: bool,
+    preprocess: bool,
+) -> str:
     """
-    try:
-        files = os.listdir(dir_name)
-    except OSError:
-        files = os.listdir(os.getcwd())
-    try:
-        with Image.open(input_name) as img:
-            split_name = os.path.split(output_name)[1]
-            if split_name in files:
-                print("{} already exists! ".format(split_name))
-                saving = input("Do you want to overwrite it?(y/n) ")
-                if saving.lower() == "n":
-                    sys.exit("Exiting...")
-            img.save(output_name)
-    except OSError:
-        sys.exit("{} doesn't exist.".format(input_name))
+    Generate default output name based on pycrusher parameters.
 
-
-def compress(final_output, qualities: list[int]) -> None:
-    """Compresses file in a quality calculated real time.
-    This quality is based on percentage, where 'iterations' is the total.
-    Returns the last_quality, so the file can be saved for the last
-    time without increasing file size.
     Args:
-        final_output(str): String representing the final file name,
-                                with version and format.
-        iterations(int)[Optional]: How many times to iterate compression
-        extra(int)[Optional]: How much to enforce compression
-        reverse_bool(bool)[Optional]: If True, goes from zero to 'iterations'.
-    Raises:
-        PermissionError: I don't really know why it happens.
-    """
-    print(f"compressing with qualities {qualities}")
-    for quality in tqdm.tqdm(qualities):
-        while True:
-            try:
-                with Image.open(final_output) as img:
-                    img.convert("RGB")
-                    img.save(final_output, format="JPEG", quality=quality)
-                break
-            except PermissionError:
-                pass
+        input_path (pathlib.Path): Input given by parse_args.
+        iterations (int): How many times to iterate compression.
+        extra (int): How much to enforce compression.
+        color (float): Color saturation.
+        reverse (bool): Reverse qualities.
+        preprocess (bool): Preprocess color.
 
-
-def change_colors(final_output: str, color: float, quality: int) -> None:
-    """Changes color of image multiple times and saves in the
-    last compression quality.
-    Args:
-        final_output(str): String representing the final file name,
-                                with version and format.
-        colors(float): Colors to change.
-        quality(int): Last quality of compression
     Returns:
-        Nothing.
-    Raises:
-        PermissionError: I don't really know why it happens,
-                             I just try until it works.
+        Default output name based on pycrusher parameters.
+
     """
-    while True:
-        try:
-            with Image.open(final_output) as img:
-                converter = ImageEnhance.Color(img)
-                img = converter.enhance(color)
-                img.save(final_output, quality=quality)
-            break
-        except PermissionError:
-            pass
-
-
-def get_qualities(iterations: int, extra: int, reverse: bool) -> list[int]:
-    qualities = [int(100 * (float(i) / float(iterations))) for i in range(iterations)]
-    if not reverse:
-        qualities = [100 - q for q in qualities]
-    return qualities * extra
-
-
-def lossy_compress(
-    file: str,
-    output: str = "",
-    iterations: int = 50,
-    extra: int = 1,
-    color: float = 1.0,
-    reverse: bool = False,
-    preprocess: bool = False,
-    dir_name: str = "",
-) -> None:
-    ImageFile.MAXBLOCK = 2**22
-    final_output = get_final_output_name(
-        file, output, iterations, extra, color, reverse, preprocess, dir_name
-    )
-    prepare_compression(file, final_output, dir_name)
-
-    qualities = get_qualities(iterations, extra, reverse)
-    print("Qualities:", qualities)
-    if not qualities:
-        return
-
+    output_suffixes = [f"i{iterations}", f"e{extra}"]
+    if reverse:
+        output_suffixes.append("rev")
     if preprocess:
-        change_colors(final_output, color, quality=qualities[0])
-        compress(final_output, qualities)
+        output_suffixes.append("pre")
+    if color != 1.0:
+        output_suffixes.append(f"c{color}")
+
+    joined_suffixes = "_".join(output_suffixes)
+    return f"{input_path.stem}_{joined_suffixes}.jpg"
+
+
+def compress(
+    image_buffer: io.BytesIO,
+    qualities: list[int],
+) -> None:
+    """
+    Save file repeatedly as JPEG for each quality in qualities.
+
+    Args:
+        image_buffer (io.BytesIO): Buffer containing image file.
+        qualities (list[int]): List of JPEG qualities.
+
+    """
+    for quality in tqdm.tqdm(qualities):
+        with Image.open(image_buffer) as img:
+            img.load()
+
+            image_buffer.seek(0)
+            image_buffer.truncate()
+
+            img.save(
+                image_buffer,
+                format="JPEG",
+                quality=quality,
+            )
+
+
+def change_color(
+    image_buffer: io.BytesIO,
+    color: float,
+    quality: int,
+) -> None:
+    """
+    Change image saturation and save it with last compression quality.
+
+    Args:
+        image_buffer (io.BytesIO): Buffer containing image file.
+        color (float): Color enhancement factor
+        quality (int): JPEG quality
+
+    """
+    with Image.open(image_buffer) as img:
+        converter = ImageEnhance.Color(img)
+        enhanced_img = converter.enhance(color)
+
+        image_buffer.seek(0)
+        image_buffer.truncate()
+
+        enhanced_img.save(
+            image_buffer,
+            format="JPEG",
+            quality=quality,
+        )
+
+
+def generate_quality_sequence(
+    iterations: int,
+    reverse: bool,
+) -> list[int]:
+    """
+    Generate JPEG quality sequence.
+
+    Args:
+        iterations (int): Number of iterations
+        reverse (bool): Reverse list?
+
+    Returns:
+        List of JPEG qualities
+
+    """
+    # Quality sequence changed a bit, such that
+    # qualities have uniform spacing.
+    delta = 100 // iterations
+    if reverse:
+        qualities = [delta * i for i in range(iterations)]
     else:
-        compress(final_output, qualities)
-        change_colors(final_output, color, quality=qualities[-1])
+        qualities = [100 - (delta * i) for i in range(iterations)]
+    return qualities
+
+
+def confirm(title: str, question: str) -> bool:
+    """
+    Confirm action.
+
+    User is required to respond.
+
+    Args:
+        title (str): Top message, printed only once.
+        question (str): Question user must respond.
+
+    Returns:
+        Confirm (True) or deny (False) question.
+
+    """
+    print(title)  # noqa: T201
+    while True:
+        confirm = input(f"{question} (y/n) ")
+        if not confirm:
+            continue
+        if confirm.lower() in {"n", "no"}:
+            return False
+        if confirm.lower() in {"y", "yes"}:
+            return True
+
+
+def run(
+    *,
+    input_path: pathlib.Path,
+    iterations: int,
+    extra: int,
+    color: float,
+    reverse: bool,
+    preprocess: bool,
+    output_path: pathlib.Path | None,
+) -> None:
+    if output_path is None:
+        default_output_name = generate_default_output_name(
+            input_path,
+            iterations=iterations,
+            extra=extra,
+            color=color,
+            reverse=reverse,
+            preprocess=preprocess,
+        )
+        output_path = COMPRESSIONS_DIRECTORY.joinpath(default_output_name)
+
+    if output_path.exists():
+        should_overwrite = confirm(
+            title=f"File already exists: {output_path}",
+            question="Do you want to overwrite it?",
+        )
+        if not should_overwrite:
+            return
+
+    qualities = extra * generate_quality_sequence(iterations, reverse)
+
+    with io.BytesIO(input_path.read_bytes()) as image_buffer:
+        if preprocess:
+            change_color(image_buffer, color, quality=qualities[0])
+            compress(image_buffer, qualities[1:])
+        else:
+            compress(image_buffer, qualities[:-1])
+            change_color(image_buffer, color, quality=qualities[-1])
+
+        output_path.write_bytes(image_buffer.getvalue())
