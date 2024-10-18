@@ -30,7 +30,7 @@ classifiers = [
 dependencies = ["importlib-metadata>=6.7", "pillow>=9.5", "tqdm>=4.66.5"]
 
 urls.Issues = "https://github.com/jonesmartins/pycrusher/issues"
-urls.Repository = "https://github.com/jonsmartins/pycrusher"
+urls.Repository = "https://github.com/jonesmartins/pycrusher"
 
 scripts.pycrusher = "pycrusher.cli:main"
 
@@ -40,11 +40,11 @@ format.preview = true
 lint.select = ["ALL"]
 lint.ignore = [
   "ANN101", # no type annotation for self
+  # By Ruff's recommendation:
+  "COM812",
   "CPY001", # copyright notices
   "D203",   # 'one blank line before class summary'
   "D212",   # 'multiline summary should start at first line'
-  # By Ruff's recommendation:
-  "COM812",
   "ISC001",
 ]
 lint.per-file-ignores."tests/**/*.py" = [
@@ -54,6 +54,10 @@ lint.per-file-ignores."tests/**/*.py" = [
 ]
 
 lint.preview = true
+
+[tool.codespell]
+# builtin = "clear,usage"
+count = true
 
 [tool.pytest.ini_options]
 # For future reference: https://docs.pytest.org/en/7.1.x/reference/reference.html#ini-options-ref
@@ -66,11 +70,6 @@ addopts = """\
   --cov-branch
   --hypothesis-explain
 """
-
-
-[tool.codespell]
-# builtin = "clear,usage"
-count = true
 
 [tool.mypy]
 show_error_codes = true
